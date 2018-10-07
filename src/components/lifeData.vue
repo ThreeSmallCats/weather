@@ -11,7 +11,7 @@
               <span class='little-cen'>{{item.brf}}</span>
             </div>
             <div class="more">
-              &nbsp;&nbsp;<span>{{item.txt}}</span>
+              <span>{{item.txt}}</span>
             </div>
           </div>
         </div>
@@ -46,15 +46,16 @@ export default {
   background-color: white;
   width: 100%;
   overflow: hidden;
-  padding: 5px;
+  padding: 5px 10px 5px 5px;
   border-radius: 10px;
   box-shadow: @boxShadow;
   .lifeData{
     width: 100%;
     padding-bottom: 2px;
-    border-bottom: 1px solid rgba(225, 225, 225, 0.6);
+    // border-bottom: 1px solid rgba(225, 225, 225, 0.6);
     overflow: hidden;
     box-sizing: border-box;
+    margin-top: 20px;
     .iconBox{
       width: 20%;
       float: left;
@@ -65,9 +66,16 @@ export default {
     .text{
       width: 80%;
       float: left;
+      border-bottom: 1px solid rgba(225, 225, 225, 0.6);
       .little{
+        margin-bottom: 5px;
         .little-title{
+          display: inline-block;
+          padding-left: 8px;
           font-size: 1em;
+          border-left: 5px solid @topcenBackgroundColor; 
+          line-height: 1.1;
+
         }
         .little-cen{
           font-size: 1em;
@@ -75,8 +83,12 @@ export default {
       }
       .more{
         font-size: 0.7em;
+        margin-bottom: 20px;
       }
     }
+  }
+  .lifeData:last-child .text{
+    border-bottom: none;
   }
 }
 </style>
