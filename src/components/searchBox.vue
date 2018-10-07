@@ -78,6 +78,12 @@ import { mapMutations } from "vuex";
                 this.searchData = []
                     this.value = ''
                     this.show = true
+                    // 为了手机键盘收回
+                    // 不收回，如果点击键盘，回发生页面错误
+                    setTimeout(() => {
+                        
+                        this.searchBox.style.display = 'none'
+                    }, 500);
                 })
        
             },
@@ -95,8 +101,14 @@ import { mapMutations } from "vuex";
                     this.show = true
                     // console.log(22222222222);
                     // console.log(this.inp.value);
+                    // 为了手机键盘收回
+                    // 不收回，如果点击键盘，回发生页面错误
+                    setTimeout(() => {
+                        
+                        this.searchBox.style.display = 'none'
+                    }, 500);
                 
-            }
+            },
         }
     }
 </script>

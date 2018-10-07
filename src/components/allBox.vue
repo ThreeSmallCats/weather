@@ -55,7 +55,8 @@ export default {
       lat: "",
       LShow: false,
       search :'',
-      value : ''
+      value : '',
+      
     };
   },
   created() {
@@ -68,6 +69,7 @@ export default {
   mounted() {
     // let inp = document.querySelector('#inp')
     // console.log(inp);
+    
     let icon = icondate(this.msgData.now.cond_code);
     let weather = this.msgData.now.cond_txt;
     // 上部分天气图标
@@ -128,7 +130,13 @@ export default {
     ...mapMutations(["setLocationData"]),
     // 显示搜索模块
     showSearchBox(){
-      this.search.style.transform = `translateX(0%)`
+      // 为了手机键盘收回
+      // 不收回，如果点击键盘，回发生页面错误
+      this.search.style.display = `block`
+      setTimeout(() => {
+        
+        this.search.style.transform = `translateX(0%)`
+      }, 100);
       // this.value = ''
     }
   }
