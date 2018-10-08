@@ -21,19 +21,23 @@
 <script>
 export default {
   name: "lifeData",
-  props : ['msgData'],
+  props: ["msgData"],
   data() {
     return {};
   },
-  created(){
-     
-  },
-  mounted(){
-    let iconBoxArr = document.querySelectorAll('.iconBox')
-    let iconColor = ['rgb(39, 216, 83)','blue','green','red','skyblue','gold']
+  created() {},
+  mounted() {
+    let iconBoxArr = document.querySelectorAll(".iconBox");
+    let iconColor = [
+      "rgb(39, 216, 83)",
+      "blue",
+      "green",
+      "red",
+      "skyblue",
+      "gold"
+    ];
     for (let i = 0; i < iconBoxArr.length; i++) {
-      iconBoxArr[i].style.color = iconColor[i]
-      
+      iconBoxArr[i].style.color = iconColor[i];
     }
   }
 };
@@ -41,7 +45,7 @@ export default {
 
 <style scoped lang='less'>
 @import "../baseStyle/base.less";
-.lifeDataBox{
+.lifeDataBox {
   box-sizing: border-box;
   background-color: white;
   width: 100%;
@@ -49,46 +53,44 @@ export default {
   padding: 5px 10px 5px 5px;
   border-radius: 10px;
   box-shadow: @boxShadow;
-  .lifeData{
+  .lifeData {
     width: 100%;
     padding-bottom: 2px;
-    // border-bottom: 1px solid rgba(225, 225, 225, 0.6);
     overflow: hidden;
     box-sizing: border-box;
     margin-top: 20px;
-    .iconBox{
+    .iconBox {
       width: 20%;
       float: left;
       text-align: center;
       font-size: 2.5em;
       margin: auto 0;
     }
-    .text{
+    .text {
       width: 80%;
       float: left;
       border-bottom: 1px solid rgba(225, 225, 225, 0.6);
-      .little{
+      .little {
         margin-bottom: 5px;
-        .little-title{
+        .little-title {
           display: inline-block;
           padding-left: 8px;
           font-size: 1em;
-          border-left: 5px solid @topcenBackgroundColor; 
-          line-height: 1.1;
-
+          border-left: 5px solid @topcenBackgroundColor;
+          line-height: 1;
         }
-        .little-cen{
+        .little-cen {
           font-size: 1em;
         }
       }
-      .more{
+      .more {
         font-size: 0.7em;
         margin-bottom: 20px;
       }
     }
-  }
-  .lifeData:last-child .text{
-    border-bottom: none;
+    &:last-child .text {
+      border-bottom: none;
+    }
   }
 }
 </style>

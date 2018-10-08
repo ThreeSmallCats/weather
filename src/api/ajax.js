@@ -22,12 +22,13 @@ function ajax(url) {
   })
 }
 
-// 实时天气，生活指数，未来3天预报
+// 实时天气，生活指数，    未来7天预报,逐小时天气（开发者）
 export function weatherData(lon, lat) {
+  var weatherUrl = ''
   if (arguments.length == 1) {
-    var weatherUrl = `https://free-api.heweather.com/s6/weather?key=ee5050739d9e42cf9bbe36dc30a7a053&location=${arguments[0]}`
+    weatherUrl = `https://free-api.heweather.com/s6/weather?key=ee5050739d9e42cf9bbe36dc30a7a053&location=${arguments[0]}`
   } else {
-    var weatherUrl = `https://free-api.heweather.com/s6/weather?key=ee5050739d9e42cf9bbe36dc30a7a053&location=${lon},${lat}`
+    weatherUrl = `https://free-api.heweather.com/s6/weather?key=ee5050739d9e42cf9bbe36dc30a7a053&location=${lon},${lat}`
   }
   return new Promise(function (resolve, reject) {
     ajax(weatherUrl).then((data) => {
@@ -63,10 +64,11 @@ export function airData(lon, lat) {
 
 // 城市搜索
 export function searchCity(lon, lat) {
+  var cityUrl = ''
   if (arguments.length == 1) {
-    var cityUrl = `https://search.heweather.com/find?key=ee5050739d9e42cf9bbe36dc30a7a053&group=cn&number=20&location=${arguments[0]}`
+    cityUrl = `https://search.heweather.com/find?key=ee5050739d9e42cf9bbe36dc30a7a053&group=cn&number=20&location=${arguments[0]}`
   } else {
-    var cityUrl = `https://search.heweather.com/find?key=ee5050739d9e42cf9bbe36dc30a7a053&group=cn&number=20&location=${lon},${lat}`
+    cityUrl = `https://search.heweather.com/find?key=ee5050739d9e42cf9bbe36dc30a7a053&group=cn&number=20&location=${lon},${lat}`
   }
   return new Promise(function (resolve, reject) {
 

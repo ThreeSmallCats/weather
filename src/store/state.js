@@ -72,6 +72,70 @@ export var state = {
                 // 最低温度
                 tmp_min: 1,
             },
+            {
+                // 预报日期
+                date: '2018-10-03',
+                // 白天天气状态码
+                cond_code_d: 100,
+                // 晚间天气状态码
+                cond_code_n: 100,
+                // 白天天气状态描述
+                cond_txt_d: '晴',
+                // 晚间天气状态描述
+                cond_txt_n: '晴',
+                // 最高温度
+                tmp_max: 1,
+                // 最低温度
+                tmp_min: 1,
+            },
+            {
+                // 预报日期
+                date: '2018-10-03',
+                // 白天天气状态码
+                cond_code_d: 100,
+                // 晚间天气状态码
+                cond_code_n: 100,
+                // 白天天气状态描述
+                cond_txt_d: '晴',
+                // 晚间天气状态描述
+                cond_txt_n: '晴',
+                // 最高温度
+                tmp_max: 1,
+                // 最低温度
+                tmp_min: 1,
+            },
+            {
+                // 预报日期
+                date: '2018-10-03',
+                // 白天天气状态码
+                cond_code_d: 100,
+                // 晚间天气状态码
+                cond_code_n: 100,
+                // 白天天气状态描述
+                cond_txt_d: '晴',
+                // 晚间天气状态描述
+                cond_txt_n: '晴',
+                // 最高温度
+                tmp_max: 1,
+                // 最低温度
+                tmp_min: 1,
+            },
+            {
+                // 预报日期
+                date: '2018-10-03',
+                // 白天天气状态码
+                cond_code_d: 100,
+                // 晚间天气状态码
+                cond_code_n: 100,
+                // 白天天气状态描述
+                cond_txt_d: '晴',
+                // 晚间天气状态描述
+                cond_txt_n: '晴',
+                // 最高温度
+                tmp_max: 1,
+                // 最低温度
+                tmp_min: 1,
+            },
         ],
         // 生活指数
         lifestyle: [
@@ -123,6 +187,57 @@ export var state = {
                 name: '紫外线指数',
                 icon: '\ue74a'
             },
+        ],
+        hourly: [{
+                cond_code: '100',
+                cond_txt: '晴',
+                time: '2018-10-08 16:00',
+                tmp: 30,
+            },
+            {
+                cond_code: '100',
+                cond_txt: '晴',
+                time: '2018-10-08 16:00',
+                tmp: 30,
+            },
+            {
+                cond_code: '100',
+                cond_txt: '晴',
+                time: '2018-10-08 16:00',
+                tmp: 30,
+            },
+            {
+                cond_code: '100',
+                cond_txt: '晴',
+                time: '2018-10-08 16:00',
+                tmp: 30,
+            },
+            {
+                cond_code: '100',
+                cond_txt: '晴',
+                time: '2018-10-08 16:00',
+                tmp: 30,
+            },
+            {
+                cond_code: '100',
+                cond_txt: '晴',
+                time: '2018-10-08 16:00',
+                tmp: 30,
+            },
+            {
+                cond_code: '100',
+                cond_txt: '晴',
+                time: '2018-10-08 16:00',
+                tmp: 30,
+            },
+            {
+                cond_code: '100',
+                cond_txt: '晴',
+                time: '2018-10-08 16:00',
+                tmp: 30,
+            },
+
+
         ],
         // 刷新时间
         update: {

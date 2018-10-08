@@ -30,101 +30,98 @@
   </div>
 </template>
 <script>
-import { LApi } from './api/locationApi.js'
-import { weatherData } from './api/ajax.js'
-import { mapGetters,mapMutations } from 'vuex'
-import allBox from './components/allBox.vue'
-    export default {
-      data(){
-        return {
-          location : '什么都没有',
-          locationOne : '什么都没有',
-          locationTwo : '什么都没有',
-          locationThree : '什么都没有',
-          locationFour : '什么都没有',
-          show : false,
-          lon : '',
-          lat : '',
-        }
+import { LApi } from "./api/locationApi.js";
+import { weatherData } from "./api/ajax.js";
+import { mapGetters, mapMutations } from "vuex";
+import allBox from "./components/allBox.vue";
+export default {
+  data() {
+    return {
+      location: "什么都没有",
+      locationOne: "什么都没有",
+      locationTwo: "什么都没有",
+      locationThree: "什么都没有",
+      locationFour: "什么都没有",
+      show: false,
+      lon: "",
+      lat: ""
+    };
+  },
+  created() {
+    LApi.getLocation().then(
+      loc => {
+        // 经度
+        this.lon = loc.coords.longitude;
+        // 纬度
+        this.lat = loc.coords.latitude;
+        // 获取定位
+        weatherData(this.lon, this.lat).then(data => {
+          this.location = data.HeWeather6["0"];
+          this.setLocationData(this.location);
+          this.location = this.getLocationData;
+          this.show = true;
+        });
       },
-      created(){
-          LApi.getLocation().then((loc)=>{
-          // 经度
-          this.lon = loc.coords.longitude
-          // 纬度
-          this.lat = loc.coords.latitude
-          // 获取定位
-          weatherData(this.lon,this.lat).then((data)=>{
-            this.location = data.HeWeather6["0"]
-              this.setLocationData(this.location)
-              this.location = this.getLocationData
-          this.show = true
-          })
-        },(err)=>{
-          // 错误后处理（定位失败）
-          // 直接读取三水天气
-           weatherData('CN101280802').then((data)=>{
-            this.location = data.HeWeather6["0"]
-              this.setLocationData(this.location)
-              this.location = this.getLocationData
-          this.show = true
-          })
-        })
-      },
-      mounted() {
-        
-      },
-      components : {
-        allBox,
-      },
-      computed : {
-        ...mapGetters([
-          'getLocationData',
-        ])
-      },
-      methods : {
-        ...mapMutations([
-          'setLocationData',
-        ]),
-      },
-    }
+      err => {
+        // 错误后处理（定位失败）
+        // 直接读取三水天气
+        weatherData("CN101280802").then(data => {
+          this.location = data.HeWeather6["0"];
+          this.setLocationData(this.location);
+          this.location = this.getLocationData;
+          this.show = true;
+        });
+      }
+    );
+  },
+  mounted() {},
+  components: {
+    allBox
+  },
+  computed: {
+    ...mapGetters(["getLocationData"])
+  },
+  methods: {
+    ...mapMutations(["setLocationData"])
+  }
+};
 </script>
 <style lang="less">
-@import './baseStyle/index.less';
-#app{
+@import "./baseStyle/index.less";
+#app {
   position: relative;
   width: 100%;
   height: 100%;
-  #search{
+  #search {
     transform: translateX(100%);
   }
-  .loading{
+  .loading {
     position: relative;
     width: 100%;
     height: 100%;
     background-color: @topcenBackgroundColor;
-    .svg{
+    .svg {
       position: absolute;
       left: 53%;
       top: 50%;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
       width: 120px;
       height: 120px;
-      #path{
+      #path {
         stroke: rgb(55, 102, 173);
         stroke-width: 2px;
         fill: transparent;
-        stroke-dasharray: 350 350 350 350 ;
+        stroke-dasharray: 350 350 350 350;
         stroke-dashoffset: 1050;
       }
     }
-    .text{
+    .text {
       position: absolute;
       top: 60%;
       left: 50%;
       font-size: 1.5em;
-      transform: translate(-50%,0);
-      color : @dataFontColor;
+      transform: translate(-50%, 0);
+      color: @dataFontColor;
     }
   }
 }

@@ -1,29 +1,18 @@
-// 未来3天天气
+// 未来7天天气
 <template>
     <div class='futureWeather'>
+        <div class='control'>
        <div class='iconAndstate'>
-           <div class='iconAndstate-one iconfont'>
-                {{getIcon(futureData[0].cond_code_d)}} {{futureData[0].cond_txt_d}}
+           <div class='iconAndstate-one' v-for="item in futureData" :key='item.date'>
+                <span class="iconAndstate-one-icon iconfont">{{getIcon(item.cond_code_d)}}</span>&nbsp;{{item.cond_txt_d}}
            </div>
            <div class='iconAndstate-one iconfont'>
-                {{getIcon(futureData[1].cond_code_d)}} {{futureData[1].cond_txt_d}}
-           </div>
-           <div class='iconAndstate-one iconfont'>
-                {{getIcon(futureData[2].cond_code_d)}} {{futureData[2].cond_txt_d}}
-           </div>
-           <div class='iconAndstate-one iconfont'>
-                &#xe643; 不详
+                <span class="iconAndstate-one-icon iconfont">&#xe643;</span>&nbsp;不详
            </div>
        </div>
     <div class='icon'>
-        <div class='icon-one iconfont'>
-            {{futureData[0].tmp_max}} &#xe6ce;
-        </div>
-        <div class='icon-one iconfont'>
-            {{futureData[1].tmp_max}} &#xe6ce;
-        </div>
-        <div class='icon-one iconfont'>
-            {{futureData[2].tmp_max}} &#xe6ce;
+        <div class='icon-one iconfont' v-for="item in futureData" :key="item.date">
+            {{item.tmp_max}} &#xe6ce;
         </div>
         <div class='icon-one iconfont'>
             {{futureData[0].tmp_max}} &#xe6ce;
@@ -31,27 +20,29 @@
     </div>
     <div class='svgBox'>
         <svg class='svgData'>
-            <circle class='circleTop'></circle>
-            <circle class='circleTop'></circle>
-            <circle class='circleTop'></circle>
-            <circle class='circleTop'></circle>
             <path class='path-one' d='M0 0 0 0 0 0'></path>
-            <circle class='circleBottom'></circle>
-            <circle class='circleBottom'></circle>
-            <circle class='circleBottom'></circle>
-            <circle class='circleBottom'></circle>
             <path class='path-two' d='M0 0 0 0 0 0'></path>
+            <circle class='circleTop'></circle>
+            <circle class='circleTop'></circle>
+            <circle class='circleTop'></circle>
+            <circle class='circleTop'></circle>
+            <circle class='circleTop'></circle>
+            <circle class='circleTop'></circle>
+            <circle class='circleTop'></circle>
+            <circle class='circleTop'></circle>
+            <circle class='circleBottom'></circle>
+            <circle class='circleBottom'></circle>
+            <circle class='circleBottom'></circle>
+            <circle class='circleBottom'></circle>
+            <circle class='circleBottom'></circle>
+            <circle class='circleBottom'></circle>
+            <circle class='circleBottom'></circle>
+            <circle class='circleBottom'></circle>
         </svg>
     </div>
     <div class='tmp-min'>
-        <div class='tmp-min-one iconfont'>
-            {{futureData[0].tmp_min}} &#xe6ce;
-        </div>
-        <div class='tmp-min-one iconfont'>
-            {{futureData[1].tmp_min}} &#xe6ce;
-        </div>
-        <div class='tmp-min-one iconfont'>
-            {{futureData[2].tmp_min}} &#xe6ce;
+        <div class='tmp-min-one iconfont' v-for="item in futureData" :key='item.date'>
+            {{item.tmp_min}} &#xe6ce;
         </div>
         <div class='tmp-min-one iconfont'>
             {{futureData[0].tmp_min}} &#xe6ce;
@@ -65,227 +56,309 @@
             明天
         </div>
         <div class='day-name'>
-            后天
+            {{day(2)}}
         </div>
         <div class='day-name'>
-            大后天
+             {{day(3)}}
+        </div>
+        <div class='day-name'>
+             {{day(4)}}
+        </div>
+        <div class='day-name'>
+            {{day(5)}}
+        </div>
+        <div class='day-name'>
+            {{day(6)}}
+        </div>
+        <div class='day-name'>
+            {{day(7)}}
         </div>
     </dir>
+    </div>
     </div>
 </template>
 
 <script>
 import { icondate } from "../api/icondate.js";
-    export default {
-        name : 'futureWeather',
-        props : ['futureData'],
-        data(){
-            return{
-              oneBoxX:'',
-              oneBoxY:'',
-              bottomOneBoxY: '',
-              twoBoxX:'',
-              twoBoxY:'',
-              bottomTwoBoxY:'',
-              threeBoxX:'',
-              threeBoxY:'',
-              bottomThreeBoxY:'',
-              fourBoxX:'',
-              fourBoxY:'',
-              bottomFourBoxY:'',
-              data: this.futureData,
-              pathOne:'',
-              pathTwo:'',
-              iconAndstate : ''
-            }
-        },
-        created(){
-            
-        },
-        mounted(){
-            this.pathOne = document.querySelector('.path-one')
-            this.pathTwo = document.querySelector('.path-two')
-            this.iconAndstate = document.querySelector('.iconAndstate')
-            let svgDataHeight = this.iconAndstate.clientHeight * 7
-            let svgData = document.querySelector('.svgData')
+import BScroll from "better-scroll";
+export default {
+  name: "futureWeather",
+  props: ["futureData"],
+  data() {
+    return {
+      data: this.futureData,
+      pathOne: "",
+      pathTwo: "",
+      iconAndstate: "",
+      scroll: "",
+      iconAndstateOneArr: [],
+      boxX: [],
+      boxY: [],
+      bottomBoxY: [],
+      topTmpArr: [],
+      bottomTmpArr: [],
+      topTmpMax: [],
+      topTmpMin: [],
+      bottomTmpMax: [],
+      bottomTmpMin: [],
+      Dvalue: "",
+      bottomDvalue: "",
+      interval: "",
+      bottomInterval: "",
+      x: "",
+      y: "",
+      circleTopArr: [],
+      circleBottomArr: [],
+      dayArr: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+      week: {},
+      num: ""
+    };
+  },
+  created() {
+    this.week = new Date();
+    this.num = this.week.getDay();
+  },
+  mounted() {
+    this.circleTopArr = document.querySelectorAll(".circleTop");
+    this.circleBottomArr = document.querySelectorAll(".circleBottom");
+    this.pathOne = document.querySelector(".path-one");
+    this.pathTwo = document.querySelector(".path-two");
+    this.iconAndstate = document.querySelector(".iconAndstate");
+    let svgDataHeight = this.iconAndstate.clientHeight * 7;
+    let svgData = document.querySelector(".svgData");
 
-            svgData.setAttribute('height',svgDataHeight)
-            // 计算折线坐标
-            this.aa()
-            
-        },
-    //    监听更换城市后     实现折线刷新
-        watch : {
-            data : {
-                handler(){
-            this.aa()
-                },
-                deep : true
-            }
-        },
-        methods : {
-            // 计算折线坐标
-            aa(){
+    svgData.setAttribute("height", svgDataHeight);
+    // 计算折线坐标
+    this.aa();
+    let futureWeather = document.querySelector(".futureWeather");
+    this.scroll = new BScroll(futureWeather, {
+      scrollX: true,
+      scrollY: false,
+      bounce: false
+    });
+  },
+  //    监听更换城市后     实现折线刷新
+  watch: {
+    data: {
+      handler() {
+        this.aa();
+      },
+      deep: true
+    }
+  },
+  methods: {
+    // 计算折线坐标
+    aa() {
+      // 重置数组  防止更换城市后无法刷新折线图
+      this.topTmpArr = [];
+      this.bottomTmpArr = [];
 
-            let svgBoxWidth =  this.iconAndstate.offsetWidth;
-            let svgBoxHeight = this.iconAndstate.offsetHeight;
-            
-            // 第一个盒子坐标
-            this.oneBoxX = svgBoxWidth/8 
-            this.oneBoxY = svgBoxHeight * 2
-            this.bottomOneBoxY = svgBoxHeight * 5 
+      this.iconAndstateOneArr = document.querySelectorAll(".iconAndstate-one");
+      this.x = this.iconAndstateOneArr[0].clientWidth;
+      this.y = this.iconAndstateOneArr[0].clientHeight;
+      this.boxX = [this.x / 2];
+      this.boxY = [this.y * 2];
+      this.bottomBoxY = [this.y * 5];
+      for (let i = 0; i < this.iconAndstateOneArr.length; i++) {
+        if (i == 7) {
+          // 最后一个不处理
+        } else {
+          // 开始七个处理
+          // 生成 x 坐标
+          let xx = this.boxX[i] + this.x;
+          this.boxX.push(xx);
 
-            // // 第二个盒子坐标
-            this.twoBoxX = this.oneBoxX + svgBoxWidth/4
-            this.twoBoxY = svgBoxHeight * 2
-            this.bottomTwoBoxY = svgBoxHeight * 5
+          // 未来7天温度（包括第八天不详）
+          this.topTmpArr[i] = Number(this.futureData[i].tmp_max);
+          this.bottomTmpArr[i] = Number(this.futureData[i].tmp_min);
 
-            // // 第三个盒子坐标
-            this.threeBoxX = this.twoBoxX + svgBoxWidth/4
-            this.threeBoxY = svgBoxHeight* 2
-            this.bottomThreeBoxY = svgBoxHeight * 5
+          if (this.topTmpArr.length >= 7) {
+            // 加上最后不详的温度
+            this.topTmpArr[7] = Number(this.futureData[0].tmp_max);
+            this.bottomTmpArr[7] = Number(this.futureData[0].tmp_min);
 
-            // // 第四个盒子坐标
-            this.fourBoxX = this.threeBoxX + svgBoxWidth/4
-            this.fourBoxY = svgBoxHeight * 2
-            this.bottomFourBoxY = svgBoxHeight * 5 
-            
+            // 获取温度数组最大最小值
+            this.topTmpMax = Math.max(...this.topTmpArr);
+            this.topTmpMin = Math.min(...this.topTmpArr);
+            this.bottomTmpMax = Math.max(...this.bottomTmpArr);
+            this.bottomTmpMin = Math.min(...this.bottomTmpArr);
 
-            // // 上坐标跨度计算
-            let max_origin = Number(this.futureData[0].tmp_max)
-            let max_two = Number(this.futureData[1].tmp_max)
-            let max_three = Number(this.futureData[2].tmp_max)
+            // 温度最大差值
+            this.Dvalue = Math.max(
+              Math.abs(this.topTmpArr[0] - this.topTmpMin),
+              Math.abs(this.topTmpMax - this.topTmpArr[0])
+            );
+            this.bottomDvalue = Math.max(
+              Math.abs(this.bottomTmpArr[0] - this.bottomTmpMin),
+              Math.abs(this.bottomTmpMax - this.bottomTmpArr[0])
+            );
 
-            let max_max = Math.max(max_origin,max_two,max_three);
-            let max_min = Math.min(max_origin,max_two,max_three);
+            // 每一度间隔
+            this.interval = this.y / this.Dvalue;
+            this.bottomInterval = this.y / this.bottomDvalue;
 
-            // 每一度跨度
-            if (max_origin == max_max && max_origin == max_min) {
-                // 当每一个度数相同
-                let a = 0
-                let b = 0
-                this.twoBoxY = this.oneBoxY 
-                this.threeBoxY = this.oneBoxY 
-            }else{
-                // 当度数不同
-                let a = Math.max(Math.abs(max_max - max_origin),Math.abs(max_origin - max_min))
-                // 每加1度跨度
-                let b = this.oneBoxY/2/a
-                this.twoBoxY = this.oneBoxY + (max_origin - max_two) * b 
-                this.threeBoxY = this.oneBoxY + (max_origin - max_three) * b 
-            }
+            for (let v = 0; v < 8; v++) {
+              if (v == 0) {
+                // 第一项不处理
+              } else {
+                // 生成上下折线的 Y 坐标数组
+                this.boxY[v] =
+                  this.boxY[0] +
+                  (this.topTmpArr[0] - this.topTmpArr[v]) * this.interval;
+                this.bottomBoxY[v] =
+                  this.bottomBoxY[0] +
+                  (this.bottomTmpArr[0] - this.bottomTmpArr[v]) *
+                    this.bottomInterval;
+              }
+              // 上下折线坐标打点
+              this.circleTopArr[v].setAttribute("cx", this.boxX[v]);
+              this.circleTopArr[v].setAttribute("cy", this.boxY[v]);
+              this.circleTopArr[v].setAttribute("fill", "gray");
+              this.circleTopArr[v].setAttribute("r", 2);
 
-            // // 下坐标跨度计算
-            let min_origin = Number(this.futureData[0].tmp_min)
-            let min_two = Number(this.futureData[1].tmp_min)
-            let min_three = Number(this.futureData[2].tmp_min)
-
-            let min_max = Math.max(min_origin,min_two,min_three);
-            let min_min = Math.min(min_origin,min_two,min_three);
-            if (min_origin == min_max && min_origin == min_min) {
-                // 当每一个度数相同
-                let a = 0
-                let b = 0
-                this.bottomTwoBoxY = this.bottomOneBoxY 
-                this.bottomThreeBoxY = this.bottomOneBoxY 
-            }else{
-                // 当度数不同
-                let a = Math.max(Math.abs(min_max - min_origin),Math.abs(min_origin - min_min))
-                // 每加1度跨度
-                let b = this.oneBoxY/2/a
-                this.bottomTwoBoxY = this.bottomOneBoxY + (min_origin - min_two) * b 
-                this.bottomThreeBoxY = this.bottomOneBoxY + (min_origin - min_three) * b 
-            }
-            
-            // //  上坐标打点
-            let topX = [this.oneBoxX,this.twoBoxX,this.threeBoxX,this.fourBoxX] 
-            let topY = [this.oneBoxY,this.twoBoxY,this.threeBoxY,this.fourBoxY]
-            let circleTopArr = document.querySelectorAll('.circleTop')
-            for (let i = 0; i < circleTopArr.length; i++) {
-                circleTopArr[i].setAttribute('cx',topX[i])
-                circleTopArr[i].setAttribute('cy',topY[i])
-                circleTopArr[i].setAttribute('fill','gray')
-                circleTopArr[i].setAttribute('r',2)
-            }
-
-            // //  下坐标打点
-            let bottomX = [this.oneBoxX,this.twoBoxX,this.threeBoxX,this.fourBoxX] 
-            let bottomY = [this.bottomOneBoxY,this.bottomTwoBoxY,this.bottomThreeBoxY,this.bottomFourBoxY]
-            let circleBottomArr = document.querySelectorAll('.circleBottom')
-            for (let i = 0; i < circleBottomArr.length; i++) {
-                circleBottomArr[i].setAttribute('cx',bottomX[i])
-                circleBottomArr[i].setAttribute('cy',bottomY[i])
-                circleBottomArr[i].setAttribute('fill','gray')
-                circleBottomArr[i].setAttribute('r',2)  
+              this.circleBottomArr[v].setAttribute("cx", this.boxX[v]);
+              this.circleBottomArr[v].setAttribute("cy", this.bottomBoxY[v]);
+              this.circleBottomArr[v].setAttribute("fill", "gray");
+              this.circleBottomArr[v].setAttribute("r", 2);
             }
 
             setTimeout(() => {
-                // 折线动画
-                this.pathOne.classList.add('active')
-                this.pathTwo.classList.add('active')
+              // 折线动画
+              this.pathOne.classList.add("active");
+              this.pathTwo.classList.add("active");
             }, 500);
-            this.pathOne.setAttribute('d',`M${this.oneBoxX},${this.oneBoxY} ${this.twoBoxX},${this.twoBoxY} ${this.threeBoxX},${this.threeBoxY} ${this.fourBoxX},${this.fourBoxY}`)         
-            this.pathTwo.setAttribute('d',`M${this.oneBoxX},${this.bottomOneBoxY} ${this.twoBoxX},${this.bottomTwoBoxY} ${this.threeBoxX},${this.bottomThreeBoxY} ${this.fourBoxX},${this.bottomFourBoxY}`)
-            },
-            getIcon(key){
-                return icondate(key)
-            }
-           
+            // 设置上下折线坐标
+            this.pathOne.setAttribute(
+              "d",
+              `M${this.boxX[0]},${this.boxY[0]} 
+                    ${this.boxX[1]},${this.boxY[1]} 
+                    ${this.boxX[2]},${this.boxY[2]} 
+                    ${this.boxX[3]},${this.boxY[3]} 
+                    ${this.boxX[4]},${this.boxY[4]} 
+                    ${this.boxX[5]},${this.boxY[5]} 
+                    ${this.boxX[5]},${this.boxY[5]} 
+                    ${this.boxX[6]},${this.boxY[6]} 
+                    ${this.boxX[7]},${this.boxY[7]} `
+            );
+            this.pathTwo.setAttribute(
+              "d",
+              `M${this.boxX[0]},${this.bottomBoxY[0]} 
+                    ${this.boxX[1]},${this.bottomBoxY[1]} 
+                    ${this.boxX[2]},${this.bottomBoxY[2]} 
+                    ${this.boxX[3]},${this.bottomBoxY[3]} 
+                    ${this.boxX[4]},${this.bottomBoxY[4]} 
+                    ${this.boxX[5]},${this.bottomBoxY[5]} 
+                    ${this.boxX[5]},${this.bottomBoxY[5]} 
+                    ${this.boxX[6]},${this.bottomBoxY[6]} 
+                    ${this.boxX[7]},${this.bottomBoxY[7]} `
+            );
+          }
         }
+      }
+    },
+    getIcon(key) {
+      return icondate(key);
+    },
+    day(a) {
+      let n = this.num + a;
+      if (n > 6) {
+        n = n - 7;
+      }
+      return this.dayArr[n];
     }
+  }
+};
 </script>
 
 <style scoped lang='less'>
-@import '../baseStyle/base.less';
-.futureWeather{
-    border-radius: 10px;
-    background-color: #fff;   
-    box-shadow: @boxShadow ;
-    margin-bottom: 10px;
-    padding: 5px;
-    .iconAndstate{
-        .iconAndstate-one{
-            display: inline-block;
-            width: 25%;
-            text-align: center;
+@import "../baseStyle/base.less";
+.futureWeather {
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: @boxShadow;
+  margin-bottom: 10px;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 5px;
+  .control {
+    width: 200%;
+    .iconAndstate {
+      .iconAndstate-one {
+        display: inline-block;
+        width: 12.5%;
+        text-align: center;
+        padding: 5px 0;
+        color: rgba(0, 0, 0, 0.6);
+        // border-right: 1px solid @futureWeatherBorder;
+        box-sizing: border-box;
+        &:last-child {
+          border: none;
         }
-    }
-    .icon{
-        .icon-one{
-            display: inline-block;
-            width: 25%;
-            text-align: center;
+        .iconAndstate-one-icon {
+          color: rgb(69, 156, 238);
         }
+      }
     }
-    .tmp-min{
-        .tmp-min-one{
-            display:inline-block;
-            width:25%;
-            text-align:center; 
+    .icon {
+      .icon-one {
+        display: inline-block;
+        width: 12.5%;
+        text-align: center;
+        padding: 5px 0;
+        color: rgba(0, 0, 0, 0.6);
+        box-sizing: border-box;
+        border-bottom: 1px solid  @futureWeatherBorder;
+        &:last-child {
+          border-right: none;
         }
+      }
     }
-    .svgBox{
-        .svgData{
-            width:100%;
-            .path-one,.path-two{
-                transition: all 5s;
-                stroke: @dataFontColor;
-                stroke-width: 1px;
-                fill: none;
-                stroke-dasharray: 2000 2000;
-                stroke-dashoffset: 2000;
-                &.active{
-                    stroke-dashoffset: 0;
-                }
-            }
+    .tmp-min {
+      .tmp-min-one {
+        display: inline-block;
+        width: 12.5%;
+        text-align: center;
+        padding: 5px 0;
+        color: rgba(0, 0, 0, 0.6);
+        box-sizing: border-box;
+        border-top: 1px solid  @futureWeatherBorder;
+
+        &:last-child {
+          border-right: none;
         }
+      }
     }
-    .day-name-box{
-        .day-name{
-            display: inline-block;
-            width: 25%;
-            text-align: center;
+    .svgBox {
+      .svgData {
+        width: 100%;
+        .path-one,
+        .path-two {
+          transition: all 5s;
+          stroke: @pathColor;
+          stroke-width: 1px;
+          fill: none;
+          stroke-dasharray: 3000 3000;
+          stroke-dashoffset: 3000;
+          &.active {
+            stroke-dashoffset: 0;
+          }
         }
+      }
     }
+    .day-name-box {
+      .day-name {
+        display: inline-block;
+        width: 12.5%;
+        text-align: center;
+        padding: 5px 0;
+        color: rgba(0, 0, 0, 0.6);
+        box-sizing: border-box;
+        &:last-child {
+          border: none;
+        }
+      }
+    }
+  }
 }
 </style>

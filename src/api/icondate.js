@@ -145,5 +145,6 @@ export function icondate(key) {
         case  '901' : return '\ue642';  
         // 未知
         case  '999' : return '\ue643'; 
+        default :  return '\ue643';
     }
 }
