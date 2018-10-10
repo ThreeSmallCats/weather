@@ -18,7 +18,7 @@
         </div>
         <div class='citys'>
             <ul class='city-box'>
-                <li class='city-box-item' v-for="item in searchData" :key='item.cid' v-on:click='getId(item.cid)'>{{item.location}}</li>
+                <li class='city-box-item' v-for="item in searchData" :key='item.cid' v-on:click='getId(item.cid)'>{{item.location}}&nbsp;&nbsp;<span class='from-city'>{{item.admin_area}}   {{item.parent_city}}</span></li>
             </ul>
         </div>
     </div>
@@ -188,6 +188,9 @@ export default {
         width: 100%;
         padding: 10px 0 10px 10px;
         border-bottom: 1px solid rgba(128, 128, 128, 0.432);
+        .from-city{
+          color: rgba(128, 128, 128, 0.432);
+        }
       }
     }
   }
